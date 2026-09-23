@@ -49,3 +49,12 @@
 - จำนวน task ที่รอ Open Question: 1 task (T-12 รอ Q-02)
 - task ที่หนักที่สุด: T-05 คำนวณช่วงใกล้เคียงเมื่อช่วงเต็ม เพราะต้องอิงตรรกะหลายเรื่องพร้อมกัน ได้แก่ FR-BKG-03, ASM-02 และความถูกต้องเรื่องไม่ให้เกิดการจองซ้อน
 - AC ที่ทดสอบยาก: AC-BKG-03 เพราะต้องจำลองหลาย actor ที่ยืนยันพร้อมกัน และตรวจว่า 409 + 3 ช่วงที่ใกล้ที่สุดถูกคืนแบบตรงเวลา และไม่เกิดจองซ้อน ข้อเสนอวิธีทดสอบแบบย่อ: ใช้ SQLite ในหน่วยความจำ ตั้งสถานะ slot เหลือ 1 ที่ แล้วยิง concurrent booking 2-3 request แบบ parallel กับ mock clock ให้เวลาเดียวกัน แล้วตรวจว่าผลลัพธ์มีแค่ 1 booking และช่วงที่เสนออยู่ในวันเดียวกัน/วันถัดไปเท่านั้น
+
+---
+
+## 2569-09-23 12:30 คำสั่ง: /implement T-01
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์ที่สร้าง/แก้: backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T_01_schema.py
+- ผล test: `cd backend && pytest tests/test_T_01_schema.py -q` -> 1 passed in 0.85s
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี เพราะ spec.md, plan.md และ task ระบุชัดเจนว่าต้องใช้ PostgreSQL, ตาราง slots, bookings และ audit_logs, และห้ามมีคอลัมน์เลขบัตรประชาชนใน bookings
