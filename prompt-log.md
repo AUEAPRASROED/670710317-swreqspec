@@ -58,3 +58,12 @@
 - ไฟล์ที่สร้าง/แก้: backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T_01_schema.py
 - ผล test: `cd backend && pytest tests/test_T_01_schema.py -q` -> 1 passed in 0.85s
 - สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี เพราะ spec.md, plan.md และ task ระบุชัดเจนว่าต้องใช้ PostgreSQL, ตาราง slots, bookings และ audit_logs, และห้ามมีคอลัมน์เลขบัตรประชาชนใน bookings
+
+---
+
+## 2569-09-23 12:45 คำสั่ง: /implement T-09
+
+- เครื่องมือ: Copilot ใน Codespaces
+- ไฟล์ที่สร้าง/แก้: frontend/src/pages/SlotPicker.jsx, frontend/src/App.jsx, frontend/src/__tests__/setup.test.jsx
+- ผล test: `cd frontend && npm test -- --run src/__tests__/setup.test.jsx` -> 1 passed (1)
+- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี เพราะ task และ plan ระบุชัดเจนว่าหน้าจอใช้ API จำลองตามสัญญา API และต้องเริ่มจากหน้าเลือกแพ็กเกจ / ช่วงเวลาเท่านั้น

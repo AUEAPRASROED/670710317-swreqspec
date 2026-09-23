@@ -1,23 +1,27 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import App from '../App.jsx'
+import SlotPicker from '../pages/SlotPicker.jsx'
 
-vi.mock('../api/client.js', () => ({
-  api: {
-    getSlots: vi.fn(async () => ({
-      slots: [
-        { id: 1, slotDate: '2026-09-23', startTime: '09:00', packageCode: 'general', remaining: 3 },
-        { id: 2, slotDate: '2026-09-23', startTime: '10:00', packageCode: 'general', remaining: 1 },
-      ],
-    })),
-  },
-}))
+const mockApi = {
+  getSlots: vi.fn(async () => ({
+    slots: [
+      { id: 1, slotDate: '2026-09-23', startTime: '09:00', packageCode: 'general', remaining: 3 },
+      { id: 2, slotDate: '2026-09-23', startTime: '10:00', packageCode: 'general', remaining: 1 },
+    ],
+  })),
+}
+
+vi.mock('../api/client.js', () => ({ api: mockApi }))
 
 test('T-09 แสดงแพ็กเกจและช่วงเวลาว่างพร้อมจำนวนที่นั่งคงเหลือ', async () => {
-  render(<App />)
+  render(<SlotPicker />)
 
   expect(screen.getByText('เลือกแพ็กเกจและช่วงเวลา')).toBeTruthy()
   expect(screen.getByText('แพ็กเกจทั่วไป')).toBeTruthy()
+
+  await waitFor(() => {
+    expect(mockApi.getSlots).toHaveBeenCalled()
+  })
 
   await waitFor(() => {
     expect(screen.getByText(/09:00/)).toBeTruthy()
@@ -27,6 +31,6 @@ test('T-09 แสดงแพ็กเกจและช่วงเวลาว
   fireEvent.click(screen.getByText('แพ็กเกจพิเศษ'))
 
   await waitFor(() => {
-    expect(screen.getByText('แพ็กเกจพิเศษ')).toBeTruthy()
+    expect(mockApi.getSlots).toHaveBeenCalledTimes(2)
   })
 })
