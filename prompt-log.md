@@ -61,3 +61,23 @@
 - เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
 - ผลลัพธ์: ตรวจพบแถว AC-BKG-01 ทั้ง 3 แถวใน specs/001-booking/test-cases.md มีสถานะ "ใช้ได้" และเขียน test ตามแถวเหล่านั้นลง backend/tests/test_AC_BKG_01.py
 - รัน pytest สำหรับไฟล์นี้แล้วพบว่าบาง test ล้มตรงจุดที่ระบบยังอนุญาตให้จองเมื่อ slot เต็ม (Full slot ถูกสร้างเป็น 409 ตาม AC แต่ current code ลด remaining เป็น -1 และคืน 201)
+
+---
+
+## 2569-10-07 08:43 คำสั่ง: /verify specs/001-booking/
+
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: สร้าง specs/001-booking/rtm.md และบันทึกผลตรวจตาม spec, code, และ test
+- รัน backend pytest -v: 7 passed
+- รัน frontend npm test -- --run: 1 passed
+- ข้อค้นพบหลัก: FR-BKG-01 ใช้ 14 วันแทน 30 วัน, CON-TECH-01 ยัง default เป็น SQLite, DOM-PDPA-01 มีตารางแต่ไม่มี audit log จริง, Q-02 ยังเป็น Open Question แต่โค้ดใช้การเดาเป็น A001
+- สถานะรวม: feature ยังไม่พร้อมยืนยันว่าตรงตาม spec อย่างสมบูรณ์
+
+---
+
+## 2569-10-07 08:44 คำสั่ง: แก้โค้ดนำ endpoint ยกเลิกการจองออก
+
+- เหตุผล: ทีมระบุว่า endpoint ยกเลิกการจองอยู่ใน Out of scope (UC-02)
+- ไฟล์ที่แก้: backend/app/booking/router.py, backend/app/booking/service.py
+- ผลลัพธ์: ลบ `DELETE /bookings/{booking_id}` และ `cancel_booking` ออกจาก router และ service ตามคำสั่ง
+- ผล test: `cd backend && pytest -q` ผ่าน 7 tests
