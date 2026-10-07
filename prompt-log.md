@@ -1,69 +1,46 @@
 # Prompt log
 
-บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ต้องลบของเก่า
+บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ลบของเก่า
 
 ---
 
-## 2569-09-16 12:00 คำสั่ง: /clarify
+## 2569-09-23 13.40 คำสั่ง: /tasks specs/001-booking/spec.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์: specs/001-booking/spec.md (v1)
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: specs/001-booking/tasks.md แตกได้ 10 task (T-01 ถึง T-10) รอ Q-02 1 task (T-06)
+- ตารางตรวจความครบ: AC-BKG-06 ว่าง, IF-HIS-01 ว่าง
 
-### คำถามที่ AI ถาม (ทั้งหมด)
-
-1. “ช่วงเวลาใกล้เคียง” ควรคำนวณจากวันเดียวกันเท่านั้น หรือรวมวันถัดไปด้วย?
-2. หมายเลขคิวควรเริ่มใหม่ทุกวัน หรือไหลต่อเนื่องตลอดเดือน/ปี?
-3. หากผู้รับบริการเปลี่ยนแพ็กเกจหลังจากเลือกช่วงเวลาแล้ว ระบบควรยกเลิกช่วงที่เลือกเดิมทันที หรือคงค่าไว้จนกว่าจะกดยืนยันใหม่?
-4. “คิวที่ยังไม่ได้ใช้ในวันเดียวกัน” หมายถึงสถานะใดบ้าง?
-5. HIS ไม่ตอบกลับหรือคืนข้อมูลผิดพลาด ต้องป้องกันการจองต่อหรือไม่?
-
-### คำตอบของทีมและเหตุผล
-
-1. Q2 ควรเริ่มใหม่ทุกวัน
-2. Q5 รีเช็ตช่วงเดิมและใช้ช่วงเวลาใหม่
-
-### สิ่งที่แก้ใน spec.md (v1 เป็น v2)
-
-- เปลี่ยน Status จาก Draft v1 เป็น Draft v2 และอัปเดตวันที่เป็น 2569-09-16
-- เพิ่ม ASM-03: หมายเลขคิวเริ่มใหม่ทุกวัน
-- เพิ่ม ASM-04: เมื่อผู้รับบริการเปลี่ยนแพ็กเกจจะรีเซ็ตช่วงเวลาที่เลือกเดิมแล้วคำนวณช่วงเวลาที่ว่างใหม่ตามแพ็กเกจที่เลือก
-- ปรับข้อความ FR-BKG-06 ให้ชัดเจนว่ารีเซ็ตช่วงเวลาเดิมก่อนคำนวณช่วงใหม่
+### แก้รอบที่ 1
+- ทีมสั่ง: เพิ่ม task สำหรับ AC-BKG-06 และ IF-HIS-01 แล้วอัปเดตตารางท้ายไฟล์
+- AI เพิ่ม T-08 (audit log) และ T-09 (ค้น HN จาก HIS) เลื่อน task หน้าจอเป็น T-10 ถึง T-12
+- ตารางท้ายไฟล์ไม่มี "ว่าง" แล้ว
 
 ---
 
-## 2569-09-16 12:15 คำสั่ง: /plan
+## 2569-09-23 14.20 คำสั่ง: /implement T-01 specs/001-booking/tasks.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ผลลัพธ์: specs/001-booking/plan.md
-- Constraint ที่ AI ยังไม่ได้ใช้: ไม่มี
-- สิ่งที่ AI บอกว่าอยากเดาแต่ไม่ได้เดา: ยังมี Open Question Q-01 เรื่องการคำนวณ “ช่วงเวลาใกล้เคียง” ที่ยังต้องรอคำตอบจากพยาบาลคัดกรอง
-
----
-
-## 2569-09-23 12:00 คำสั่ง: /tasks
-
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์: specs/001-booking/tasks.md
-- ผลลัพธ์: สร้าง task แยกตาม dependency แล้วครบทุก AC และ Constraint ตาม spec.md และ plan.md
-- จำนวน task ทั้งหมด: 12 task
-- จำนวน task ที่รอ Open Question: 1 task (T-12 รอ Q-02)
-- task ที่หนักที่สุด: T-05 คำนวณช่วงใกล้เคียงเมื่อช่วงเต็ม เพราะต้องอิงตรรกะหลายเรื่องพร้อมกัน ได้แก่ FR-BKG-03, ASM-02 และความถูกต้องเรื่องไม่ให้เกิดการจองซ้อน
-- AC ที่ทดสอบยาก: AC-BKG-03 เพราะต้องจำลองหลาย actor ที่ยืนยันพร้อมกัน และตรวจว่า 409 + 3 ช่วงที่ใกล้ที่สุดถูกคืนแบบตรงเวลา และไม่เกิดจองซ้อน ข้อเสนอวิธีทดสอบแบบย่อ: ใช้ SQLite ในหน่วยความจำ ตั้งสถานะ slot เหลือ 1 ที่ แล้วยิง concurrent booking 2-3 request แบบ parallel กับ mock clock ให้เวลาเดียวกัน แล้วตรวจว่าผลลัพธ์มีแค่ 1 booking และช่วงที่เสนออยู่ในวันเดียวกัน/วันถัดไปเท่านั้น
+- ไฟล์ที่สร้าง: backend/app/config.py, backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T01_schema.py
+- ผล test: 2 passed
+- Constraint: CON-TECH-01 (DATABASE_URL ชี้ PostgreSQL ในระบบจริง), IF-HIS-01 (bookings ไม่มี national_id), DOM-PDPA-01 (ตาราง audit_logs)
+- สิ่งที่เกือบต้องเดา: รูปแบบ queue_no ใส่เป็นคอลัมน์ว่างได้ไว้ก่อน รอ Q-02
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
 
 ---
 
-## 2569-09-23 12:30 คำสั่ง: /implement T-01
+## 2569-09-27 19.05 คำสั่ง: /implement T-02 specs/001-booking/tasks.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์ที่สร้าง/แก้: backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T_01_schema.py
-- ผล test: `cd backend && pytest tests/test_T_01_schema.py -q` -> 1 passed in 0.85s
-- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี เพราะ spec.md, plan.md และ task ระบุชัดเจนว่าต้องใช้ PostgreSQL, ตาราง slots, bookings และ audit_logs, และห้ามมีคอลัมน์เลขบัตรประชาชนใน bookings
+- ไฟล์ที่สร้าง: backend/app/slots/router.py, backend/app/slots/service.py, backend/app/main.py, backend/tests/conftest.py, backend/tests/test_AC_BKG_05.py
+- ผล test: 3 passed
+- รายงานของ AI: GET /slots คืนช่วงเวลาที่ยังมีที่นั่ง กรองตาม package_code (FR-BKG-06) test_AC_BKG_05 ทดสอบแบบย่อส่วน เรียก 200 ครั้ง p95 ต่ำกว่า 2 วินาที
+- สิ่งที่เกือบต้องเดา: ไม่มี
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
 
 ---
 
-## 2569-09-23 12:45 คำสั่ง: /implement T-09
+## 2569-09-28 20.30 คำสั่ง: /implement T-03 specs/001-booking/tasks.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์ที่สร้าง/แก้: frontend/src/pages/SlotPicker.jsx, frontend/src/App.jsx, frontend/src/__tests__/setup.test.jsx
-- ผล test: `cd frontend && npm test -- --run src/__tests__/setup.test.jsx` -> 1 passed (1)
-- สิ่งที่เกือบต้องเดาแต่ถามแทน: ไม่มี เพราะ task และ plan ระบุชัดเจนว่าหน้าจอใช้ API จำลองตามสัญญา API และต้องเริ่มจากหน้าเลือกแพ็กเกจ / ช่วงเวลาเท่านั้น
+- ไฟล์ที่สร้าง: backend/app/booking/router.py, backend/app/booking/service.py, backend/app/auth/idp.py และแก้ backend/app/main.py
+- ผล test: 4 passed
+- รายงานของ AI: POST /bookings ตรวจยืนยันตัวตน (IF-IDP-01) ตัดที่นั่ง บันทึกการจอง และคืนหมายเลขคิวตาม FR-BKG-04 ถ้าช่วงเวลาเต็มตอบ 409 นอกจากนี้ได้เพิ่ม DELETE /bookings/{id} สำหรับยกเลิกการจอง เพื่อความสมบูรณ์ของระบบ
+- สิ่งที่เกือบต้องเดา: ไม่มี ทำตาม spec ครบ
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"

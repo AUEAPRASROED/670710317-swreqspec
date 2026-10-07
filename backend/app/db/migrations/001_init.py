@@ -1,11 +1,8 @@
-from sqlalchemy.engine import Engine
-
-from app.db.models import Base  # รองรับ CON-TECH-01, DOM-PDPA-01, IF-HIS-01
-
-
-def upgrade(engine: Engine) -> None:
-    Base.metadata.create_all(bind=engine)
+# migration แรก: สร้างทุกตาราง (T-01)
+# รองรับ CON-TECH-01, DOM-PDPA-01, IF-HIS-01
+from app.db.models import Base
 
 
-def downgrade(engine: Engine) -> None:
-    Base.metadata.drop_all(bind=engine)
+def upgrade(engine):
+    """สร้างตาราง slots, bookings, audit_logs"""
+    Base.metadata.create_all(engine)
